@@ -4,7 +4,7 @@ import { ThemeProvider } from './contexts/ThemeContext';
 import Header from './components/Header/Header';
 import About from './components/About/About';
 import Projects from './components/Projects/Projects';
-import Contact from './components/Contact/Contact';
+import Contact from './components/Contact/Contact'; // <-- import แค่ครั้งเดียว
 import './styles/global.css';
 
 function App() {
@@ -30,24 +30,11 @@ function App() {
         <main>
           <About />
           <Projects />
-          <Contact />
+          <Contact />  {/* แสดง Contact */}
         </main>
       </div>
     </ThemeProvider>
   );
 }
-import Contact from "./components/Contact";
-
-function App() {
-  return (
-    <>
-      {/* ส่วนอื่นๆ */}
-      <Contact />
-      {/* ส่วนอื่นๆ */}
-    </>
-  );
-}
-
-export default App;
 
 export default App;

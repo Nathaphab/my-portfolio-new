@@ -53,7 +53,7 @@ body {
 
 /* Utility Classes */
 .container {
-  max-width: 1200px;
+  max-width: auto;
   margin: 0 auto;
   padding: 0 2rem;
 }
@@ -100,12 +100,39 @@ body {
 }
 
 /* Responsive */
-@media (max-width: 768px) {
-  .container {
-    padding: 0 1rem;
+@media (max-width: 1024px) {
+  .container { max-width: 900px; }
+}
+
+@media (max-width: 480px) {
+  .btn-primary, .btn-secondary {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
   }
-  
-  .section {
-    padding: 3rem 0;
-  }
+}
+
+
+/* Animations */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.fade-in {
+  animation: fadeIn 0.6s ease forwards;
+}
+
+.fade-in-up {
+  animation: fadeInUp 0.6s ease forwards;
+}
+
+/* Button active feedback */
+.btn-primary:active,
+.btn-secondary:active {
+  transform: scale(0.96);
 }

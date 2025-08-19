@@ -1,140 +1,167 @@
-import { useState } from "react";
-import { Github, Linkedin, Mail } from "lucide-react";
+import React, { useState } from 'react';
+import './Contact.css';
 
-export default function Contact() {
+function Contact() {
   const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    message: "",
+    name: '',
+    email: '',
+    message: ''
   });
-  const [errors, setErrors] = useState({});
-  const [success, setSuccess] = useState(false);
 
-  const validate = () => {
+  const [errors, setErrors] = useState({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitSuccess, setSubmitSuccess] = useState(false);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value
+    });
+  };
+
+  const validateForm = () => {
     const newErrors = {};
-    if (!formData.name.trim()) newErrors.name = "Name is required";
-    if (!formData.email.trim()) {
-      newErrors.email = "Email is required";
-    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = "Email is invalid";
+
+    if (!formData.name.trim()) {
+      newErrors.name = 'Please enter your name';
     }
-    if (!formData.message.trim()) newErrors.message = "Message is required";
-    return newErrors;
+
+    if (!formData.email.trim()) {
+      newErrors.email = 'Please enter your email';
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+      newErrors.email = 'Please enter a valid email';
+    }
+
+    if (!formData.message.trim()) {
+      newErrors.message = 'Please enter your message';
+    } else if (formData.message.length < 10) {
+      newErrors.message = 'Message should be at least 10 characters';
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const validationErrors = validate();
-    if (Object.keys(validationErrors).length > 0) {
-      setErrors(validationErrors);
-      setSuccess(false);
-    } else {
-      setErrors({});
-      setSuccess(true);
-      console.log("Form submitted:", formData);
-      // TODO: เชื่อม API หรือ service เช่น EmailJS
-      setFormData({ name: "", email: "", message: "" });
+
+    if (validateForm()) {
+      setIsSubmitting(true);
+
+      // Simulate form submission
+      setTimeout(() => {
+        console.log('Form submitted:', formData);
+        setIsSubmitting(false);
+        setSubmitSuccess(true);
+        setFormData({ name: '', email: '', message: '' });
+
+        // Reset success message after 5 seconds
+        setTimeout(() => setSubmitSuccess(false), 5000);
+      }, 1500);
     }
   };
 
   return (
-    <section id="contact" className="py-12">
-      <h2 className="text-3xl font-bold text-center mb-8">Contact Me</h2>
+    <section id="contact" className="contact section">
+      <div className="container">
+        <h2 className="section-title">Get In Touch</h2>
+        <p className="section-subtitle">
+          You can contact me but I don't get a response.!!!!!!!!
+        </p>
 
-      <div className="max-w-2xl mx-auto bg-white shadow-md rounded-2xl p-6">
-        <form onSubmit={handleSubmit} className="space-y-4">
-          {/* Name */}
-          <div>
-            <label className="block font-medium">Name</label>
-            <input
-              type="text"
-              value={formData.name}
-              onChange={(e) =>
-                setFormData({ ...formData, name: e.target.value })
-              }
-              className="w-full border rounded-lg p-2 mt-1"
-              placeholder="Enter your name"
-            />
-            {errors.name && (
-              <p className="text-red-500 text-sm">{errors.name}</p>
-            )}
+        <div className="contact-content">
+          <div className="contact-info">
+            <h3 className="info-title">Contact Information</h3>
+            <div className="contact-details">
+              <div className="contact-item">
+                <i className="fas fa-envelope"></i>
+                <span>kaewkhadcirapha@gmail.com</span>
+              </div>
+              <div className="contact-item">
+                <i className="fas fa-phone"></i>
+                <span>+66 965 702 793</span>
+              </div>
+              <div className="contact-item">
+                <i className="fas fa-map-marker-alt"></i>
+                <span>Lampang Thailand</span>
+              </div>
+            </div>
+
+            <h3 className="social-title">Follow Me</h3>
+            <div className="social-links">
+              <a href="https://github.com/Nathaphab" target="_blank" rel="noopener noreferrer" className="social-link">
+                <i className="fab fa-github"></i>
+              </a>
+              <a href="https://www.instagram.com/_nonei_?igsh=MTIxM2toaGZoYWtseQ%3D%3D&utm_source=qr"   target="_blank"   rel="noopener noreferrer" className="social-link">
+                <i className="fab fa-instagram"></i>
+                </a>
+            </div>
           </div>
 
-          {/* Email */}
-          <div>
-            <label className="block font-medium">Email</label>
-            <input
-              type="email"
-              value={formData.email}
-              onChange={(e) =>
-                setFormData({ ...formData, email: e.target.value })
-              }
-              className="w-full border rounded-lg p-2 mt-1"
-              placeholder="Enter your email"
-            />
-            {errors.email && (
-              <p className="text-red-500 text-sm">{errors.email}</p>
+          <form onSubmit={handleSubmit} className="contact-form">
+            <div className="form-group">
+              <label htmlFor="name">Name</label>
+              <input
+                type="text"
+                id="name"
+                name="name"
+                value={formData.name}
+                onChange={handleChange}
+                className={`form-input ${errors.name ? 'error' : ''}`}
+                placeholder="Your name"
+              />
+              {errors.name && <span className="error-message">{errors.name}</span>}
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="email">Email</label>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+                className={`form-input ${errors.email ? 'error' : ''}`}
+                placeholder="Your email"
+              />
+              {errors.email && <span className="error-message">{errors.email}</span>}
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="message">Message</label>
+              <textarea
+                id="message"
+                name="message"
+                value={formData.message}
+                onChange={handleChange}
+                rows="5"
+                className={`form-textarea ${errors.message ? 'error' : ''}`}
+                placeholder="Your message"
+              ></textarea>
+              {errors.message && <span className="error-message">{errors.message}</span>}
+            </div>
+
+            <button type="submit" className="btn-primary" disabled={isSubmitting}>
+              {isSubmitting ? (
+                <>
+                  <i className="fas fa-spinner fa-spin"></i> Sending...
+                </>
+              ) : (
+                'Send Message'
+              )}
+            </button>
+
+            {submitSuccess && (
+              <div className="success-message">
+                <i className="fas fa-check-circle"></i> Thank you! Your message has been sent.
+              </div>
             )}
-          </div>
-
-          {/* Message */}
-          <div>
-            <label className="block font-medium">Message</label>
-            <textarea
-              value={formData.message}
-              onChange={(e) =>
-                setFormData({ ...formData, message: e.target.value })
-              }
-              className="w-full border rounded-lg p-2 mt-1"
-              rows="4"
-              placeholder="Enter your message"
-            />
-            {errors.message && (
-              <p className="text-red-500 text-sm">{errors.message}</p>
-            )}
-          </div>
-
-          {/* Submit */}
-          <button
-            type="submit"
-            className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition"
-          >
-            Send Message
-          </button>
-
-          {success && (
-            <p className="text-green-600 mt-2">
-              ✅ Your message has been sent successfully!
-            </p>
-          )}
-        </form>
-      </div>
-
-      {/* Contact Info + Socials */}
-      <div className="mt-8 text-center">
-        <p className="text-lg">Or reach me at:</p>
-        <p className="font-semibold">your.email@example.com</p>
-
-        <div className="flex justify-center gap-6 mt-4">
-          <a
-            href="https://github.com/Nathaphab"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Github className="w-6 h-6 hover:text-black" />
-          </a>
-          <a
-            href="https://linkedin.com/in/Nathaphab"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Linkedin className="w-6 h-6 hover:text-blue-600" />
-          </a>
-          <a href="mailto:your.email@example.com">
-            <Mail className="w-6 h-6 hover:text-red-600" />
-          </a>
+          </form>
         </div>
       </div>
     </section>
   );
 }
+
+export default Contact;
