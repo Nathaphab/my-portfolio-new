@@ -36,5 +36,18 @@ function App() {
     </ThemeProvider>
   );
 }
+import Contact from "./components/Contact";
+
+function App() {
+  return (
+    <>
+      {/* ส่วนอื่นๆ */}
+      <Contact />
+      {/* ส่วนอื่นๆ */}
+    </>
+  );
+}
+
+export default App;
 
 export default App;
